@@ -29,8 +29,8 @@ class TestTextEmbedder(TestCase):
         file = "datasets/sample.dataset"
         e = TextEmbedder(file)
         embedding = e.create_embeddings(text)
-        self.assertEqual(len(embedding), 1)
+        self.assertEqual(len(embedding), 3)
 
         text = "धाँ दि"
         embedding = e.create_embeddings(text)
-        self.assertEqual(len(embedding), 2)
+        self.assertEqual(len(embedding), 4)

@@ -17,7 +17,7 @@ class TextEmbedder:
         if self.content is not None:
             return self.content
 
-        basedir = os.path.dirname(os.path.abspath(sys.argv[1]))
+        basedir = os.path.dirname(os.path.abspath(sys.argv[0]))
         path = basedir + "/" + self.vocab_path
 
         with open(path) as f:
@@ -40,4 +40,6 @@ class TextEmbedder:
         encoding = self.vocabulary()
         text = text if text is not None else self.extract_content()
         text = self.clean_text(text)
-        return list(map(lambda a: encoding[a], text.split(" ")))
+        tmp = list(map(lambda a: encoding[a], text.split(" ")))
+
+        return [-1, *tmp, -1]
