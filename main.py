@@ -4,16 +4,11 @@ from src.text_generator import TextGenerator
 
 
 def main():
-    e = TextEmbedder()
-    embeddings = e.create_embeddings()
-    vocab = e.vocabulary()
-    p = ProbabilityGenerator(embeddings)
-    probability = p.probability_matrix()
-    g = TextGenerator(
-        probability=probability,
-        vocabulary=vocab,
-    )
-    generated = g.generate()
+    with open("datasets/0.dataset") as f:
+        content = f.read()
+
+    g = TextGenerator()
+    generated = g.generate(content)
 
     with open("output/generated.txt", "w") as f:
         f.write(generated)
