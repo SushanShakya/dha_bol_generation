@@ -1,4 +1,5 @@
 from functools import reduce
+import torch
 
 
 class ProbabilityGenerator:
@@ -7,7 +8,7 @@ class ProbabilityGenerator:
         self.embeddings = embeddings
 
     def pad(self):
-        return [-1, *self.embeddings, -2]
+        return [-1, *self.embeddings, -1]
 
     def bigraph(self):
         tmp = self.pad()
@@ -28,12 +29,16 @@ class ProbabilityGenerator:
 
         return reduce(calc, bigraph, dict())
 
-    def probability(self):
-        bc = self.bigraph_count()
-        count = len(self.bigraph())
+    def probability_matrix(self):
+        p = self.bigraph_count().items()
+        l = len(p)
 
-        def calc(a, b):
-            a[b] = bc[b] / count
-            return a
+        result = torch.zeros(l, l)
 
-        return reduce(calc, bc.keys(), dict())
+        for a, b in p:
+            result[a[0], a[1]] = b
+
+        for i in range(len(result)):
+            result[i] /= result[i].sum()
+
+        return result
