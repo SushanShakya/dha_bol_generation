@@ -1,36 +1,29 @@
-import torch
+from src.embeddings_generator import EmbeddingsGenerator
+from src.probability_generator import ProbabilityGenerator
+from src.text_embedder import TextEmbedder
+from src.vocab_generator import VocabGenerator
 
 
 class TextGenerator:
 
-    def __init__(self, probability, vocabulary):
-        self.probability = probability
-        self.vocabulary = self._rev_vocab(vocabulary)
-        self.start = -1
+    sample: str
 
-    def _rev_vocab(self, vocab):
-        m = {}
-        for i in vocab.items():
-            m[i[1]] = i[0]
+    def __init__(self, sample: str):
+        self.sample = sample
 
-        return m
-
-    def generate_next(self, current):
-        return torch.multinomial(
-            self.probability[current],
-            num_samples=1,
-            replacement=True,
-        ).item()
+    def _generate_vocab(self):
+        return VocabGenerator().generate(self.sample)
 
     def generate(self):
-        generated = []
-        c = self.start
-        l = len(self.probability) - 1
+        vocab = self._generate_vocab()
 
-        while True:
-            nxt = self.generate_next(c)
-            if nxt == l:
-                break
-            generated.append(self.vocabulary[nxt])
-            c = nxt
-        return " ".join(generated)
+        e = TextEmbedder(vocab)
+        embeddings = e.embed(self.sample)
+
+        p = ProbabilityGenerator(embeddings)
+        probability = p.probability_matrix()
+
+        g = EmbeddingsGenerator(probability)
+        generated = g.generate()
+
+        return " ".join(e.unembed(generated))

@@ -1,22 +1,11 @@
 from unittest import TestCase
 
-from src.probability_generator import ProbabilityGenerator
-from src.text_embedder import TextEmbedder
 from src.text_generator import TextGenerator
 
 
 class TestTextGenerator(TestCase):
-    def test_generation(self):
-        embeddings = [-1, 0, 1, 2, -1]
-        vocab = {
-            "a": 0,
-            "b": 1,
-            "c": 2,
-        }
-        p = ProbabilityGenerator(embeddings).probability_matrix()
-        g = TextGenerator(
-            probability=p,
-            vocabulary=vocab,
-        )
+    def test_generate(self):
+        sample = "रिक त ख ति धाँ"
+        g = TextGenerator(sample)
         generated = g.generate()
-        self.assertEqual(generated, "a b c")
+        self.assertEqual(generated, sample)
