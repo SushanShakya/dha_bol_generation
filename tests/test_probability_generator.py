@@ -6,16 +6,8 @@ from src.probability_generator import ProbabilityGenerator
 class TestProbabilityGenerator(TestCase):
 
     def setUp(self):
-        self.embeddings = [0, 1, 2]
+        self.embeddings = [-1, 0, 1, 2, -1]
         self.g = ProbabilityGenerator(self.embeddings)
-
-    def test_padding(self):
-        """
-        Test to see if start and end is added to
-        the values
-        """
-        padded = self.g.pad()
-        self.assertEqual(padded, [-1, 0, 1, 2, -1])
 
     def test_bigraph(self):
         """

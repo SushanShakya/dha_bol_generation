@@ -7,11 +7,8 @@ class ProbabilityGenerator:
     def __init__(self, embeddings):
         self.embeddings = embeddings
 
-    def pad(self):
-        return [-1, *self.embeddings, -1]
-
     def bigraph(self):
-        tmp = self.pad()
+        tmp = self.embeddings
         a = tmp[:-1]
         b = tmp[1:]
         return list(zip(a, b))
