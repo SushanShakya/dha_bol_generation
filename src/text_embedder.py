@@ -4,42 +4,21 @@ import re
 
 
 class TextEmbedder:
-    def __init__(self, vocab_path=None):
-        self.vocab_path = (
-            vocab_path if vocab_path is not None else "datasets/sample.dataset"
-        )
-        self.content = None
+    def __init__(self, vocab):
+        self.vocab = vocab
+        self.stoi = self._stoi()
+        self.itos = self._itos()
 
-    def clean_text(self, text):
-        return re.sub(r"\n+", " ", text)
+    def _stoi(self):
+        return {v: i for i, v in enumerate(self.vocab)}
 
-    def extract_content(self):
-        if self.content is not None:
-            return self.content
+    def _itos(self):
+        return {i: v for i, v in enumerate(self.vocab)}
 
-        basedir = os.path.dirname(os.path.abspath(sys.argv[0]))
-        path = basedir + "/" + self.vocab_path
-
-        with open(path) as f:
-            self.content = f.read()
-
-        return self.clean_text(self.content)
-
-    def vocabulary(self):
-        content = self.extract_content()
-        result = {}
-
-        for i, word in enumerate(set(content.split(" "))):
-            if word in result:
-                continue
-            result[word] = i
-
-        return result
-
-    def create_embeddings(self, text=None):
-        encoding = self.vocabulary()
-        text = text if text is not None else self.extract_content()
-        text = self.clean_text(text)
+    def embed(self, text):
+        encoding = self.stoi
         tmp = list(map(lambda a: encoding[a], text.split(" ")))
-
         return [-1, *tmp, -1]
+
+    def unembed(self, embeddings):
+        return list(map(lambda a: self.itos.get(a, ""), embeddings))

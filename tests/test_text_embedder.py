@@ -5,32 +5,38 @@ from src.text_embedder import TextEmbedder
 
 class TestTextEmbedder(TestCase):
 
-    def test_clean_text(self):
-        inputs = [
-            "a b c\na b c",
-            "a b c\n\na b c",
-            "a b c\n\n\na b c",
-            "a b c\n\n\n\na b c",
-        ]
-        output = "a b c a b c"
-        e = TextEmbedder("")
-        for i in inputs:
-            cleaned = e.clean_text(i)
-            self.assertEqual(cleaned, output)
+    def test_stoi(self):
+        vocab = ["a", "b", "c"]
+        a = TextEmbedder(vocab)
+        self.assertEqual(
+            a.stoi,
+            {"a": 0, "b": 1, "c": 2},
+        )
 
-    def test_vocab_generation(self):
-        file = "datasets/sample.dataset"
-        e = TextEmbedder(file)
-        vocab = e.vocabulary()
-        self.assertEqual(len(vocab.keys()), 11)
+    def test_itos(self):
+        vocab = ["a", "b", "c"]
+        a = TextEmbedder(vocab)
+        self.assertEqual(
+            a.itos,
+            {0: "a", 1: "b", 2: "c"},
+        )
 
     def test_embed(self):
         text = "धाँ"
-        file = "datasets/sample.dataset"
-        e = TextEmbedder(file)
-        embedding = e.create_embeddings(text)
+        e = TextEmbedder(["धाँ", "दि"])
+        embedding = e.embed(text)
         self.assertEqual(len(embedding), 3)
 
         text = "धाँ दि"
-        embedding = e.create_embeddings(text)
+        embedding = e.embed(text)
         self.assertEqual(len(embedding), 4)
+
+    def test_unembed(self):
+        e = TextEmbedder(["धाँ", "दि"])
+        embedding = [0, 1, 1, 0]
+        result = e.unembed(embedding)
+
+        self.assertEqual(
+            result,
+            ["धाँ", "दि", "दि", "धाँ"],
+        )
