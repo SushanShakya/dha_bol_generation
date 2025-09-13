@@ -7,7 +7,7 @@ from src.text_generator import TextGenerator
 
 class TestTextGenerator(TestCase):
     def test_generation(self):
-        embeddings = [0, 1, 2]
+        embeddings = [-1, 0, 1, 2, -1]
         vocab = {
             "a": 0,
             "b": 1,
