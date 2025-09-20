@@ -7,14 +7,14 @@ class ProbabilityGenerator:
     def __init__(self, embeddings):
         self.embeddings = embeddings
 
-    def bigraph(self):
+    def bigram(self):
         tmp = self.embeddings
         a = tmp[:-1]
         b = tmp[1:]
         return list(zip(a, b))
 
-    def bigraph_count(self):
-        bigraph = self.bigraph()
+    def bigram_count(self):
+        bigraph = self.bigram()
 
         def calc(a, b):
             if b in a:
@@ -27,7 +27,7 @@ class ProbabilityGenerator:
         return reduce(calc, bigraph, dict())
 
     def probability_matrix(self):
-        p = self.bigraph_count().items()
+        p = self.bigram_count().items()
         l = len(p)
 
         result = torch.zeros(l, l)
