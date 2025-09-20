@@ -8,7 +8,8 @@ def main():
         content = f.read()
 
     g = TextGenerator()
-    generated = g.generate(content)
+    # generated = g.generate(content)
+    generated = g.generate_from_nn(content)
 
     with open("output/generated.txt", "w") as f:
         f.write(generated)
