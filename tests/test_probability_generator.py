@@ -13,7 +13,7 @@ class TestProbabilityGenerator(TestCase):
         """
         Test to see if bigraph generated is correct
         """
-        bigraph = self.g.bigraph()
+        bigraph = self.g.bigram()
         self.assertEqual(bigraph, [(-1, 0), (0, 1), (1, 2), (2, -1)])
 
     def test_probabilty_matrix(self):
