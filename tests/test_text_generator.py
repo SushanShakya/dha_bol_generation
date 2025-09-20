@@ -9,3 +9,9 @@ class TestTextGenerator(TestCase):
         g = TextGenerator()
         generated = g.generate(sample)
         self.assertEqual(generated, sample)
+
+    def test_generate_from_nn(self):
+        sample = "रिक त ख ति धाँ"
+        g = TextGenerator()
+        generated = g.generate(sample)
+        self.assertEqual(generated, sample)
